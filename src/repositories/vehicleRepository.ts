@@ -12,9 +12,7 @@ export class VehicleRepository {
 
   async addVehicle(vehicle: VehicleWithoutDates): Promise<void> {
     try {
-      const collection = await this.mongoDbClient.getVehicleCollection();
-      const creationDate = new Date().toISOString();
-      await collection.insertOne({ dateOfCreation: creationDate, dateOfLastUpdate: creationDate, ...vehicle });
+      await this.mongoDbClient.insertIntoCollection('vehicle', vehicle);
     } catch (error) {
       throw new VError(error as Error, `Add vehicle failed`);
     } finally {
@@ -23,8 +21,7 @@ export class VehicleRepository {
   }
   async removeVehicle(vehicleId: string): Promise<void> {
     try {
-      const collection = await this.mongoDbClient.getVehicleCollection();
-      await collection.deleteOne({ _id: new ObjectId(vehicleId) });
+      await this.mongoDbClient.deleteFromCollection('vehicle', vehicleId);
     } catch (error) {
       throw new VError(error as Error, `Remove vehicle failed`);
     } finally {
@@ -34,13 +31,11 @@ export class VehicleRepository {
 
   async getVehicle(vehicleId: string) {
     try {
-      const vehicleCollection = await this.mongoDbClient.getVehicleCollection();
-      const vehicle = await vehicleCollection.findOne({ _id: new ObjectId(vehicleId) });
+      const vehicle = await this.mongoDbClient.findInCollectionWithId('vehicle', vehicleId);
       if (!vehicle || vehicle === null) {
         throw new Error('Vehicle not found');
       }
-      const dealerCollection = await this.mongoDbClient.getDealerCollection();
-      const dealer = await dealerCollection.findOne({ _id: new ObjectId(vehicle.dealer) });
+      const dealer = await this.mongoDbClient.findInCollectionWithId('dealer', vehicle.dealer);
       const vehicleWithDealer = { ...vehicle, dealer: dealer };
 
       return vehicleWithDealer;
@@ -53,17 +48,14 @@ export class VehicleRepository {
 
   async getAllVehicles() {
     try {
-      const collection = await this.mongoDbClient.getVehicleCollection();
-      const vehicles = await collection.find().toArray();
+      const vehicles = await this.mongoDbClient.getCollectionArray('vehicle');
 
       if (!vehicles || vehicles === null) {
         throw new Error('Vehicle not found');
       }
 
-      const dealerCollection = await this.mongoDbClient.getDealerCollection();
-
       for (const vehicle of vehicles) {
-        const dealer = await dealerCollection.findOne({ _id: new ObjectId(vehicle.dealer) });
+        const dealer = await this.mongoDbClient.findInCollectionWithId('dealer', vehicle.dealer);
         const vehicleWithDealer = { ...vehicle, dealer: dealer };
         vehicles[vehicles.indexOf(vehicle)] = { ...vehicleWithDealer };
       }
@@ -78,13 +70,7 @@ export class VehicleRepository {
 
   async updateVehicle(vehicleId: string, updatedVehicle: Partial<VehicleWithoutDates>): Promise<void> {
     try {
-      const collection = await this.mongoDbClient.getVehicleCollection();
-      const dateOfLastUpdate = new Date().toISOString();
-      await collection.updateOne(
-        { _id: new ObjectId(vehicleId) },
-        { $set: { ...updatedVehicle, dateOfLastUpdate: dateOfLastUpdate } },
-        { upsert: false }
-      );
+      await this.mongoDbClient.updateCollection('vehicle', vehicleId, updatedVehicle);
     } catch (error) {
       throw new VError(error as Error, `Update vehicle failed`);
     } finally {
@@ -94,9 +80,7 @@ export class VehicleRepository {
 
   async addDealer(dealer: DealerWithoutDates): Promise<void> {
     try {
-      const collection = await this.mongoDbClient.getDealerCollection();
-      const creationDate = new Date().toISOString();
-      await collection.insertOne({ dateOfCreation: creationDate, dateOfLastUpdate: creationDate, ...dealer });
+      await this.mongoDbClient.insertIntoCollection('dealer', dealer);
     } catch (error) {
       throw new VError(error as Error, `Add dealer failed`);
     } finally {
@@ -106,8 +90,7 @@ export class VehicleRepository {
 
   async removeDealer(dealerId: string): Promise<void> {
     try {
-      const collection = await this.mongoDbClient.getDealerCollection();
-      await collection.deleteOne({ _id: new ObjectId(dealerId) });
+      await this.mongoDbClient.deleteFromCollection('dealer', dealerId);
     } catch (error) {
       throw new VError(error as Error, `Remove dealer failed`);
     } finally {
@@ -117,8 +100,7 @@ export class VehicleRepository {
 
   async getDealer(dealerId: string) {
     try {
-      const collection = await this.mongoDbClient.getDealerCollection();
-      const dealer = await collection.findOne({ _id: new ObjectId(dealerId) });
+      const dealer = await this.mongoDbClient.findInCollectionWithId('dealer', dealerId);
       if (!dealer || dealer === null) {
         throw new Error('Dealer not found');
       }
@@ -132,13 +114,11 @@ export class VehicleRepository {
 
   async getDealerVehicles(dealerId: string) {
     try {
-      const collection = await this.mongoDbClient.getDealerCollection();
-      const dealer = await collection.findOne({ _id: new ObjectId(dealerId) });
+      const dealer = await this.mongoDbClient.findInCollectionWithId('dealer', dealerId);
       if (!dealer || dealer === null) {
         throw new Error('Dealer not found');
       }
-      const vehicleCollection = await this.mongoDbClient.getVehicleCollection();
-      const dealerVehicles = await vehicleCollection.find({ dealer: dealerId }).toArray();
+      const dealerVehicles = await this.mongoDbClient.findInCollectionWithOtherIndex('vehicle', { dealer: dealerId });
       return dealerVehicles;
     } catch (error) {
       throw new VError(error as Error, `Get dealer failed`);
@@ -149,13 +129,7 @@ export class VehicleRepository {
 
   async updateDealer(dealerId: string, updatedDealer: Partial<DealerWithoutDates>): Promise<void> {
     try {
-      const collection = await this.mongoDbClient.getDealerCollection();
-      const dateOfLastUpdate = new Date().toISOString();
-      await collection.updateOne(
-        { _id: new ObjectId(dealerId) },
-        { $set: { ...updatedDealer, dateOfLastUpdate: dateOfLastUpdate } },
-        { upsert: false }
-      );
+      await this.mongoDbClient.updateCollection('dealer', dealerId, updatedDealer);
     } catch (error) {
       throw new VError(error as Error, `Update dealer failed`);
     } finally {
