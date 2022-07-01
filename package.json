@@ -1,0 +1,47 @@
+{
+  "name": "vehicleapi",
+  "version": "1.0.0",
+  "description": "Add, update and delete vehicles and dealers. And list all the vehicles of particular dealer.",
+  "main": "handler.js",
+  "scripts": {
+    "start": "serverless offline",
+    "infra:init": "cd infra/modules && terraform init && terraform plan",
+    "infra:start": "cd docker && docker-compose up --detach",
+    "infra:apply": "cd infra/modules && terraform apply",
+    "destroy": "cd infra/modules && terraform destroy",
+    "test": "jest --",
+    "test:coverage": "jest --coverage",
+    "test:watchAll": "jest --watchAll"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/furkantopal/vehicleapi.git"
+  },
+  "keywords": [
+    "vehicle",
+    "dealer"
+  ],
+  "author": "furkantopal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/furkantopal/vehicleapi/issues"
+  },
+  "homepage": "https://github.com/furkantopal/vehicleapi#readme",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.101",
+    "@types/jest": "^28.1.3",
+    "@types/verror": "^1.10.5",
+    "serverless-dotenv-plugin": "^4.0.1",
+    "serverless-offline": "^8.8.0",
+    "serverless-webpack": "^5.7.1",
+    "ts-jest": "^28.0.5",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "ajv": "^8.11.0",
+    "mongodb": "^4.7.0",
+    "ts-node": "^10.8.1",
+    "verror": "^1.10.1"
+  }
+}

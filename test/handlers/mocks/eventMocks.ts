@@ -1,0 +1,62 @@
+import { APIGatewayProxyEvent, Callback, Context } from 'aws-lambda';
+
+export const mockEvent: APIGatewayProxyEvent = {
+  body: null,
+  headers: {},
+  multiValueHeaders: {},
+  httpMethod: '',
+  isBase64Encoded: true,
+  path: '',
+  pathParameters: null,
+  queryStringParameters: null,
+  multiValueQueryStringParameters: null,
+  stageVariables: null,
+  requestContext: {
+    accountId: '',
+    apiId: '',
+    authorizer: {},
+    protocol: '',
+    httpMethod: '',
+    identity: {
+      accessKey: null,
+      accountId: null,
+      apiKey: null,
+      apiKeyId: null,
+      caller: null,
+      clientCert: null,
+      cognitoAuthenticationProvider: null,
+      cognitoAuthenticationType: null,
+      cognitoIdentityId: null,
+      cognitoIdentityPoolId: null,
+      principalOrgId: null,
+      sourceIp: '',
+      user: null,
+      userAgent: null,
+      userArn: null,
+    },
+    path: '',
+    stage: '',
+    requestId: '',
+    requestTimeEpoch: 0,
+    resourceId: '',
+    resourcePath: '',
+  },
+  resource: 'string',
+};
+export const mockContext: Context = {
+  callbackWaitsForEmptyEventLoop: true,
+  functionName: '',
+  functionVersion: '',
+  invokedFunctionArn: '',
+  memoryLimitInMB: '',
+  awsRequestId: '',
+  logGroupName: '',
+  logStreamName: '',
+  getRemainingTimeInMillis: function (): number {
+    return 1;
+  },
+  done: function (): void {},
+  fail: function (error: string | Error): void {},
+  succeed: function (messageOrObject: any): void {},
+};
+export const mockCallback: Callback = function (): void {};

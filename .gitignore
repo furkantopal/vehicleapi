@@ -1,0 +1,58 @@
+# package directories
+node_modules
+jspm_packages
+dist
+.webpack/
+
+# Serverless directories
+.serverless
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# IDE
+.idea
+.vscode
+.history/
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+
+# Terraform files
+.terraform*
+terraform.tfstate*
+
+.localstack
+
+# dotenv environment variables file
+.env
+.env.*
+!docker/.env
+
+# TypeScript v1 declaration files
+typings/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Ignore Mac DS_Store files
+.DS_Store

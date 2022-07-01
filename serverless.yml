@@ -1,0 +1,83 @@
+service: vehicleapi
+frameworkVersion: '3'
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: eu-central-1
+
+functions:
+  addVehicle:
+    handler: ./src/handlers/addVehicleHandler.handler
+    events:
+      - httpApi:
+          path: /addVehicleHandler
+          method: post
+
+  removeVehicle:
+    handler: ./src/handlers/removeVehicleHandler.handler
+    events:
+      - httpApi:
+          path: /removeVehicleHandler/{vehicleId}
+          method: post
+
+  getVehicle:
+    handler: ./src/handlers/getVehicleHandler.handler
+    events:
+      - httpApi:
+          path: /getVehicleHandler/{vehicleId}
+          method: get
+
+  getAllVehicles:
+    handler: ./src/handlers/getAllVehiclesHandler.handler
+    events:
+      - httpApi:
+          path: /getAllVehiclesHandler
+          method: get
+
+  updateVehicle:
+    handler: ./src/handlers/updateVehicleHandler.handler
+    events:
+      - httpApi:
+          path: /updateVehicleHandler/{vehicleId}
+          method: post
+
+  addDealer:
+    handler: ./src/handlers/addDealerHandler.handler
+    events:
+      - httpApi:
+          path: /addDealerHandler
+          method: post
+
+  removeDealer:
+    handler: ./src/handlers/removeDealerHandler.handler
+    events:
+      - httpApi:
+          path: /removeDealerHandler/{dealerId}
+          method: post
+
+  getDealer:
+    handler: ./src/handlers/getDealerHandler.handler
+    events:
+      - httpApi:
+          path: /getDealerHandler/{dealerId}
+          method: get
+
+  getDealerVehicles:
+    handler: ./src/handlers/getDealerVehiclesHandler.handler
+    events:
+      - httpApi:
+          path: /getDealerVehicles/{dealerId}
+          method: get
+
+  updateDealer:
+    handler: ./src/handlers/updateDealerHandler.handler
+    events:
+      - httpApi:
+          path: /updateDealerHandler/{dealerId}
+          method: post
